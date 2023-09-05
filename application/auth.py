@@ -25,7 +25,7 @@ def signup():
     form = SignUp(request.form)
     if form.validate_on_submit():
         name = form.name.data.strip() if form.name.data.strip() else ''
-        new_user = Users(name=name, email=form.phonenumber.data.lower(),
+        new_user = Users(name=name, phonenumber=form.phonenumber.data.lower(),
                          password=generate_password_hash(form.password.data, method='sha256'))
         db.session.add(new_user)
         db.session.commit()
@@ -44,7 +44,7 @@ def login():
 
     form = Login(request.form)
     if form.validate_on_submit():
-        user = Users.query.filter_by(email=form.email.data.lower()).first()
+        user = Users.query.filter_by(phonenumber=form.phonenumber.data).first()
 
         if user:
             if check_password_hash(user.password, form.password.data):
