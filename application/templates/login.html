@@ -13,8 +13,8 @@
             <form method='POST' action=''>
                 {{ form.csrf_token }}
                 <div class="form-floating mb-3">
-                    <label style="padding-left:30px;" for="floatingInput">Email address</label>
-                    {{ form.email }} 
+                    <label style="padding-left:30px;" for="floatingInput">Phone Number</label>
+                    {{ form.phonenumber }}
                 </div>
                 <div class="form-floating">
                     <label style="padding-left:30px;" for="floatingPassword">Password</label>
@@ -24,8 +24,8 @@
 <!--                <label for="signin-checkbox">Keep me signed in</label>-->
                 <button type="submit"  class="btn btn-success rounded-pill w-25 p-3">Sign Up</button>
 
-                {% if form.email.errors %}
-                    {% for error in form.email.errors %}
+                {% if form.phonenumber.errors %}
+                    {% for error in form.phonenumber.errors %}
                         <span>{{ error }}</span>
                     {% endfor %}
                 {% endif %}

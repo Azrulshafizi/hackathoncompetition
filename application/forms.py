@@ -7,7 +7,7 @@ import re
 
 
 class Login(FlaskForm):
-    email = EmailField('Email', validators=[DataRequired(), Email(message='Invalid Email')])
+    phonenumber = TelField("Phone Number",[validators.Length(min=8,max=8), validators.data_required()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Log In')
 
