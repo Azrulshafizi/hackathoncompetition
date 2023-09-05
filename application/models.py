@@ -20,10 +20,10 @@ class Expenses(db.Model):
     user = db.Column(db.String(100), db.ForeignKey('users.phonenumber'), nullable=False)
 
 
-# class Staff(db.Model):
-#     def get_id(self):
-#         return self.staffid
-#     staffid = db.Column(db.Integer, nullable=False)
-#     password = db.Column(db.String(200), nullable=False)
+class staff(db.Model):
+    def get_id(self):
+        return self.staffid
+    staffid = db.Column(db.Integer, primary_key=True, unique=True,nullable=False)
+    password = db.Column(db.String(200), nullable=False)
 
 

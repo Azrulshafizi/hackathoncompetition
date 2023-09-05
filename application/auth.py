@@ -13,14 +13,14 @@ auth = Blueprint('auth', __name__)
 @auth.route('/')
 def home():
     if current_user.is_active:
-        return redirect(url_for("views.show_expenses"))
+        return redirect(url_for("views.success"))
     return render_template("home.html")
 
 @auth.route('/signup', methods=['GET','POST'])
 def signup():
     # insert code here
     if current_user.is_active:
-        return redirect(url_for("views.show_expenses"))
+        return redirect(url_for("success"))
 
     form = SignUp(request.form)
     if form.validate_on_submit():
@@ -67,25 +67,25 @@ def logout():
     return redirect(url_for('auth.home'))
 
 
-# @auth.route('/stafflogin', methods=['GET','POST'])
-# def stafflogin():
-#     # insert code here
-#     if current_user.is_active:
-#         return redirect(url_for("views.adminhome"))
-#
-#     form = Login(request.form)
-#     if form.validate_on_submit():
-#         user = Users.query.filter_by(email=form.s.data.lower()).first()
-#
-#         if user:
-#             if check_password_hash(user.password, form.password.data):
-#                 flash('Logged in successfully', category='success')
-#                 login_user(user, remember=True)
-#                 return redirect(url_for('views.show_expenses'))
-#
-#             else:
-#                 flash('Incorrect password, please try again.', category='error')
-#         else:
-#             flash('No account with that email address.', category='error')
-#
-#     return render_template('login.html', form=form)
+@auth.route('/stafflogin', methods=['GET','POST'])
+def stafflogin():
+    # insert code here
+    if current_user.is_active:
+        return redirect(url_for("views.adminhome"))
+
+    form = Login(request.form)
+    if form.validate_on_submit():
+        user = Users.query.filter_by(staffid=form.s.data.lower()).first()
+
+        if user:
+            if check_password_hash(user.password, form.password.data):
+                flash('Logged in successfully', category='success')
+                login_user(user, remember=True)
+                return redirect(url_for('views.show_expenses'))
+
+            else:
+                flash('Incorrect password, please try again.', category='error')
+        else:
+            flash('No account with that email address.', category='error')
+
+    return render_template('stafflogin.html', form=form)

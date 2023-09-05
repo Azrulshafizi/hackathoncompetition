@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
+{% from "includes/formhelper.html" import render_field %}
 <link rel="stylesheet" href="..\static\styles\form.css">
 <div class="signin-wrapper">
     <div class="sign-panels">
@@ -7,9 +8,7 @@
             <div class="signin-title">
                 <span>ADMINISTRATION</span>
 
-
             </div>
-
             <form method='POST' action=''>
                 {{ form.csrf_token }}
                 <div class="form-floating mb-3">
