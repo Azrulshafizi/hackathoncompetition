@@ -266,26 +266,40 @@ def dashboard(id):
         member_dict = db['member']
         member = member_dict.get(id)
         member.add_todo_item(new_task)
-
         db['member'] = member_dict
         db.close()
-        redirect(url_for('dashboard',id=member.get_user_id()))
+        return redirect(url_for('dashboard',id=member.get_user_id()))
 
 
-    check = []
+
     for member in member_list:
         if member.get_user_id() == id:
 
             memberlogin = member
+            member = member_dict.get(id)
             note = member.get_todo_list()
             todo_list_with_numbers = [(index + 1, task) for index, task in enumerate(note)]
-
-            check.append(member)
             break
 
-
-
     return render_template('account_management/dashboard.html',form=noteform,member=memberlogin,tasks=todo_list_with_numbers)
+
+
+@app.route('/account_management/deletetask/<int:id>/<int:task_number>/', methods=['POST'])
+def deletetask(id,task_number):
+    print(id)
+    print(task_number)
+    member_dict = {}
+    db = shelve.open('storage.db', 'w')
+    member_dict = db['member']
+    member = member_dict.get(id)
+    member.remove_todo_item(task_number)
+    db['member'] = member_dict
+    db.close()
+    return redirect(url_for('dashboard',id=member.get_user_id()))
+
+
+#         tasks.pop(index)
+#     return redirect(url_for('index'))
 
 
 # @app.route('/add', methods=['POST'])
