@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-from form import CreateMemberForm, getphone_number, resetpassword, CreateContactForm, getemail, loginpage
+from form import CreateMemberForm, getphone_number, resetpassword, CreateContactForm, getemail, loginpage,notepad
+
 
 import shelve
 from address import addressform, Updateprofileforstaff, paymentform
-from members import member
+from members import member, ToDoItem
 from staff_login import Staff_Login
 import staff, Customer
+
 
 # from check import member_login
 
@@ -164,7 +166,7 @@ def login():
             if member.get_email() == email:
                 if member.get_password() == password:
                     memberlogin = member
-                    return render_template('home.html', member=memberlogin)
+                    return redirect(url_for('dashboard',id=member.get_user_id()))
                 else:
                     flash('Password incorrect!', 'error')
                     return render_template('account_management/login.html', login=form)
@@ -238,6 +240,70 @@ def create_member():
         db.close()
         return redirect(url_for('login'))
     return render_template('account_management/CreateMember.html', form=create_member_form)
+
+
+
+@app.route('/account_management/dashboard/<int:id>/', methods=['GET','POST'])
+def dashboard(id):
+    member_dict = {}
+    db = shelve.open('storage.db', 'r')
+    member_dict = db['member']
+    db.close()
+
+    member_list = []
+    for key in member_dict:
+        members = member_dict.get(key)
+        member_list.append(members)
+        print(members)
+
+    noteform = notepad(request.form)
+    if request.method == 'POST' and noteform.validate():
+        new_task = request.form['note']
+        print(new_task)
+
+        member_dict = {}
+        db = shelve.open('storage.db', 'w')
+        member_dict = db['member']
+        member = member_dict.get(id)
+        member.add_todo_item(new_task)
+
+        db['member'] = member_dict
+        db.close()
+        redirect(url_for('dashboard',id=member.get_user_id()))
+
+
+    check = []
+    for member in member_list:
+        if member.get_user_id() == id:
+
+            memberlogin = member
+            note = member.get_todo_list()
+            todo_list_with_numbers = [(index + 1, task) for index, task in enumerate(note)]
+
+            check.append(member)
+            break
+
+
+
+    return render_template('account_management/dashboard.html',form=noteform,member=memberlogin,tasks=todo_list_with_numbers)
+
+
+# @app.route('/add', methods=['POST'])
+# def add_task():
+#     new_task = request.form['new_task']
+#     tasks.append(new_task)
+#     return redirect(url_for('index'))
+#
+# @app.route('/delete/<int:index>')
+# def delete_task(index):
+#     if 0 <= index < len(tasks):
+#         tasks.pop(index)
+#     return redirect(url_for('index'))
+
+
+
+
+
 
 
 @app.route('/account_management/UpdateMemberProfile/<int:id>/', methods=['GET','POST'])

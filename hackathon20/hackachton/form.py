@@ -1,5 +1,6 @@
-from wtforms import Form, StringField, SelectField, validators, EmailField,TelField, DateField,FileField,IntegerField,TextAreaField
+from wtforms import Form, StringField, SelectField, validators,  DateField,FileField,IntegerField,TextAreaField
 import wtforms.fields as fld
+from wtforms.fields.html5 import EmailField,TelField
 
 class CreateContactForm(Form):
     first_name = StringField('', [validators.Length(min=1,max=150), validators.DataRequired()])
@@ -35,4 +36,5 @@ class resetpassword(Form):
 
 
 
-
+class notepad(Form):
+    note = TextAreaField('Add Note',[validators.Length(min=1,max=1500), validators.DataRequired()])

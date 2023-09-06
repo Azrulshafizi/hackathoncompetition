@@ -1,5 +1,6 @@
-from wtforms import Form, StringField, SelectField, validators, EmailField,TelField, DateField,FileField, SubmitField,RadioField
+from wtforms import Form, StringField, SelectField, validators, DateField,FileField, SubmitField,RadioField
 import wtforms.fields as fld
+from wtforms.fields.html5 import EmailField,TelField
 
 
 class addressform(Form):

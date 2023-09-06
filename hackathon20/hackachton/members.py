@@ -8,6 +8,7 @@ class member:
         self.__last_name = last_name
         self.__email = email
         self.__password = password
+        self.todo_list = []
 
     def get_user_id(self):
         return self.__user_id
@@ -40,13 +41,41 @@ class member:
     def set_password(self,password):
         self.__password =password
 
-
-
     def set_email(self, email):
         self.__email = email
 
+    def add_todo_item(self, task):
+        todo_item = ToDoItem(task)
+        self.todo_list.append(todo_item)
+
+    def remove_todo_item(self, index):
+        if 0 <= index < len(self.todo_list):
+            self.todo_list.pop(index)
+
+    def get_todo_list(self):
+        return self.todo_list
+
+    def complete_todo_item(self, index):
+        if 0 <= index < len(self.todo_list):
+            self.todo_list[index].mark_completed()
+
+    def incomplete_todo_item(self, index):
+        if 0 <= index < len(self.todo_list):
+            self.todo_list[index].mark_incomplete()
 
 
+
+
+class ToDoItem:
+    def __init__(self, task):
+        self.task = task
+        self.completed = False
+
+    def mark_completed(self):
+        self.completed = True
+
+    def mark_incomplete(self):
+        self.completed = False
 
 
 class Product:
