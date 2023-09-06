@@ -17,7 +17,7 @@ class SignUp(FlaskForm):
     phonenumber = TelField("Phone Number",[validators.Length(min=8,max=8), validators.data_required()])
     password = PasswordField('Password*', validators=[DataRequired(), Length(min=8, max=24)])
     confirm_password = PasswordField('Confirm Password*', validators=[DataRequired(), EqualTo(fieldname="password", message="Passwords must match")])
-    submit = SubmitField('Sign Up')
+
 
     def validate_email(self, phonenumber):
         user = Users.query.filter_by(email=phonenumber.data.lower()).first()
@@ -43,7 +43,6 @@ class EditExpense(FlaskForm):
         if amount.data <= 0:
             raise ValidationError("Invalid amount, input should be a number greater than 0.")
 
-class StaffLogin(FlaskForm):
-    staff_id = StringField('Staff ID', validators=[DataRequired(), Email(message='Invalid Staff ID')])
+class staffLogin(FlaskForm):
+    staffid = StringField('Staff ID', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField('Log In')

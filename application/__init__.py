@@ -20,7 +20,7 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
 
-    from .models import Users, staff
+    from .models import Users, staffs
 
     # TODO: initialise sqlalchemy db here
     db.init_app(app)

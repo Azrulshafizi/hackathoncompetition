@@ -1,7 +1,8 @@
 from . import db
 from flask_login import UserMixin
 from datetime import datetime
-
+USER_ROLE = "user"
+STAFF_ROLE = "staff"
 class Users(db.Model, UserMixin):
     def get_id(self):
         return self.phonenumber
@@ -20,10 +21,12 @@ class Expenses(db.Model):
     user = db.Column(db.String(100), db.ForeignKey('users.phonenumber'), nullable=False)
 
 
-class staff(db.Model):
+class staffs(db.Model, UserMixin):
     def get_id(self):
         return self.staffid
-    staffid = db.Column(db.Integer, primary_key=True, unique=True,nullable=False)
+    staffid = db.Column(db.String(10), primary_key=True, unique=True,nullable=False)
     password = db.Column(db.String(200), nullable=False)
+
+
 
 
