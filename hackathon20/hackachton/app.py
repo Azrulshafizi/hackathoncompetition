@@ -12,7 +12,7 @@ import openai
 
 
 # input your own openai key here
-openai.api_key = "<input secret-key here>"
+openai.api_key = "key"
 
 # from check import member_login
 app = Flask(__name__)
@@ -962,7 +962,7 @@ def add_product():
 #customer_support
 # Define the chatbot responses here
 
-messages = [{"role": "system", "content": "you are a chatbot for a website called NutriFit, which is a website to track nutrition and gamify fitness through tasks and habits."}]
+messages = [{"role": "system", "content": "you are a helpful chatbot assistant for a website called NutriFit, which is a website to track nutrition and gamify fitness through tasks and habits. Your responses have a maximum wordcount of 60 words."}]
 
 def chatbot(user_input):
     try:
