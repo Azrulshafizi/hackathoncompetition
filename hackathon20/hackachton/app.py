@@ -281,6 +281,7 @@ def deletetask(id,task_number):
     member.remove_todo_item(task_number-1)
     db['member'] = member_dict
     db.close()
+
     return redirect(url_for('dashboard',id=member.get_user_id()))
 
 
