@@ -7,11 +7,14 @@ from address import addressform, Updateprofileforstaff, paymentform
 from members import member, ToDoItem
 from staff_login import Staff_Login
 import staff, Customer
+import openai
 
+
+
+# input your own openai key here
+openai.api_key = "<input secret-key here>"
 
 # from check import member_login
-
-
 app = Flask(__name__)
 app.secret_key = "any-string-12345"
 memberlogin = None
@@ -958,40 +961,56 @@ def add_product():
 #Customer Support
 #customer_support
 # Define the chatbot responses here
-responses = {
-    "hello": "Hi there!",
-    "hi": "Hi there!",
-    "color": ["The shoe is available in Blue, Red, and Black."],
-    "size": ["The shoe is available in sizes 7, 8, and 9. "],
-    "what colors does the shoe come in": "All colors",
-    "payment available": "Visa, Credit, Debit.",
-    "available payment": "Visa, Credit, Debit.",
-    "payment do you have": "Visa, Credit, Debit.",
-    "customer support": ["Please contact customer support", ["Customer Support"]],
-    "update detail": "Click into your Profile to update.",
-    "change detail": "Click into your Profile to update.",
-    "view detail": "Click into your Profile.",
-    "make payment": "After you have selected a product and checked out u can make the following payment.",
-    "agent": ["To speak with a service agent, click the button below.", ["Chat with Agent"]],
-    "add to cart": "Go to the product page and click on add to cart.",
-    "add products to cart": "Select a product and click add to cart",
-    "change delivery": "Go to Order Tracking under Profile. Under the tab 'To Ship', click on the edit button to change your address. ",
-    "view delivery": "Go into your Order Tracking under Profile.",
-    "check my point": "Navigate to the Profile page.",
-    "default": "I'm sorry, but I didn't understand that. Can you please rephrase?"
-}
+
+messages = [{"role": "system", "content": "you are a chatbot for a website called NutriFit, which is a website to track nutrition and gamify fitness through tasks and habits."}]
+
+def chatbot(user_input):
+    try:
+        messages.append({"role": "user", "content": user_input})
+        response = openai.ChatCompletion.create(
+            model = "gpt-3.5-turbo",
+            messages = messages
+        )
+        chatbot_reply = response["choices"][0]["message"]["content"]
+        messages.append({"role": "assistant", "content": chatbot_reply})
+    except:
+        chatbot_reply = "The chatbot system is down right now, please go to the contact us page to tell us more about your problem. We apologise for the inconvenience."
+    return chatbot_reply
+
+# responses = {
+#     "hello": "Hi there!",
+#     "hi": "Hi there!",
+#     "color": ["The shoe is available in Blue, Red, and Black."],
+#     "size": ["The shoe is available in sizes 7, 8, and 9. "],
+#     "what colors does the shoe come in": "All colors",
+#     "payment available": "Visa, Credit, Debit.",
+#     "available payment": "Visa, Credit, Debit.",
+#     "payment do you have": "Visa, Credit, Debit.",
+#     "customer support": ["Please contact customer support", ["Customer Support"]],
+#     "update detail": "Click into your Profile to update.",
+#     "change detail": "Click into your Profile to update.",
+#     "view detail": "Click into your Profile.",
+#     "make payment": "After you have selected a product and checked out u can make the following payment.",
+#     "agent": ["To speak with a service agent, click the button below.", ["Chat with Agent"]],
+#     "add to cart": "Go to the product page and click on add to cart.",
+#     "add products to cart": "Select a product and click add to cart",
+#     "change delivery": "Go to Order Tracking under Profile. Under the tab 'To Ship', click on the edit button to change your address. ",
+#     "view delivery": "Go into your Order Tracking under Profile.",
+#     "check my point": "Navigate to the Profile page.",
+#     "default": "I'm sorry, but I didn't understand that. Can you please rephrase?"
+# }
 
 
 
-def get_response(user_input):
-    user_input = user_input.lower()
-    for key in responses.keys():
-        if key in user_input:
-            if isinstance(responses[key], list) and len(responses[key]) == 2:
-                return responses[key]
-            else:
-                return responses[key]
-    return responses["default"]
+# def get_response(user_input):
+#     user_input = user_input.lower()
+#     for key in responses.keys():
+#         if key in user_input:
+#             if isinstance(responses[key], list) and len(responses[key]) == 2:
+#                 return responses[key]
+#             else:
+#                 return responses[key]
+#     return responses["default"]
 
 
 
@@ -999,7 +1018,7 @@ def get_response(user_input):
 @app.route("/get_response", methods=["POST"])
 def get_chat_response():
     user_input = request.form["user_input"]
-    response = get_response(user_input)
+    response = chatbot(user_input)
     return {"response": response}
 
 
