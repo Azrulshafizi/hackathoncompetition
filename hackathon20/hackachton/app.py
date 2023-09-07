@@ -212,21 +212,8 @@ def create_member():
         except:
             print("Error in retrieving Users from storage.db.")
 
-        # eList = []
-        # iList = []
-        # for key in member_dict:
-        #     email = member_dict.get(key)
-        #     eList.append(key)
-        #     for i in member_dict:
-        #         nid = member_dict[i].get_user_id()
-        #         iList.append(nid)
-        #         if str(email) == str(member_dict[i].get_email()):
-        #              global typo
-        #              typo = "Email already in use"
-        #              return render_template('CreateMember.html', typo=typo, form=create_user_form)
-        #         break
-        print(create_member_form.first_name.data)
 
+        print(create_member_form.first_name.data)
 
         members = member(create_member_form.first_name.data,
                          create_member_form.last_name.data, create_member_form.email.data,
@@ -260,7 +247,6 @@ def dashboard(id):
     if request.method == 'POST' and noteform.validate():
         new_task = request.form['note']
         print(new_task)
-
         member_dict = {}
         db = shelve.open('storage.db', 'w')
         member_dict = db['member']
@@ -292,30 +278,10 @@ def deletetask(id,task_number):
     db = shelve.open('storage.db', 'w')
     member_dict = db['member']
     member = member_dict.get(id)
-    member.remove_todo_item(task_number)
+    member.remove_todo_item(task_number-1)
     db['member'] = member_dict
     db.close()
     return redirect(url_for('dashboard',id=member.get_user_id()))
-
-
-#         tasks.pop(index)
-#     return redirect(url_for('index'))
-
-
-# @app.route('/add', methods=['POST'])
-# def add_task():
-#     new_task = request.form['new_task']
-#     tasks.append(new_task)
-#     return redirect(url_for('index'))
-#
-# @app.route('/delete/<int:index>')
-# def delete_task(index):
-#     if 0 <= index < len(tasks):
-#         tasks.pop(index)
-#     return redirect(url_for('index'))
-
-
-
 
 
 
@@ -358,7 +324,6 @@ def delete_acc(id):
     member_dict.pop(id)
     db['member'] = member_dict
     db.close()
-
     return redirect(url_for('home'))
 
 
